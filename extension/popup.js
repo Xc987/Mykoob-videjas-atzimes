@@ -14,33 +14,28 @@ document.addEventListener('DOMContentLoaded', function() {
             '<p>Error: ' + chrome.runtime.lastError.message + '</p>';
           return;
         }
-        
         const [gradesData] = results;
         if (!gradesData || !gradesData.result) {
           document.getElementById('results').innerHTML = 
-            '<p>No grade data found on this page.</p>';
+            '<p>Nav atzīmju dati.</p>';
           return;
         }
-        
         currentSubjectGrades = gradesData.result.subjectGrades;
         displayResults();
       });
     } else {
       document.getElementById('results').innerHTML = 
-        '<p>Please navigate to the Mykoob grades page to use this extension.</p>';
+        '<p>Ejiet uz mykoob atzīmju sadaļu.</p>';
       document.getElementById('overall').textContent = '';
     }
   });
 });
 
-// Rest of your existing extractGradesFromPage and displayResults functions remain the same
 function extractGradesFromPage() {
   const VALID_STATUSES = new Set(['FV', 'PD', 'KD', 'NOD', 'OPB', 'PSD', 'MD', 'ISK', 'T', 'RD', 'DD', 'prm']);
   const html = document.documentElement.outerHTML;
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, 'text/html');
-
-  // Extract subjects
   const subjectDiv = doc.querySelector('div.period_subject_div');
   const subjects = [];
   if (subjectDiv) {
@@ -53,18 +48,14 @@ function extractGradesFromPage() {
       }
     });
   }
-
-  // Extract and process grades
   const dataDiv = doc.querySelector('div.period_data_div');
   const subjectGrades = {};
   const subjectAverages = [];
-  
   if (dataDiv) {
     const gradeRows = dataDiv.querySelectorAll('tr');
     for (let i = 0; i < Math.min(gradeRows.length, subjects.length); i++) {
       const gradeCells = gradeRows[i].querySelectorAll('td[class*="col_month_"]');
       const validGrades = [];
-      
       gradeCells.forEach(cell => {
     const gradeSpans = cell.querySelectorAll('span.viewgrades_period_grade');
     gradeSpans.forEach(gradeSpan => {
@@ -76,7 +67,7 @@ function extractGradesFromPage() {
                 if (data.length > 0 && data[0].length > 2 && VALID_STATUSES.has(data[0][2])) {
                     let grade = gradeSpan.textContent.trim();
                     if (grade.includes('%')) {
-                        return; // Skip this grade if it contains '%'
+                        return;
                     }
                     if (grade.endsWith('`')) {
                         grade = grade.slice(0, -1);
@@ -92,13 +83,10 @@ function extractGradesFromPage() {
         }
     });
 });
-      
-      // Calculate subject averages
       if (validGrades.length > 0) {
         const rawAvg = validGrades.reduce((a, b) => a + b, 0) / validGrades.length;
-        // Round up if decimal >= 0.5, else round down
         const roundedAvg = (rawAvg - Math.floor(rawAvg)) < 0.5 ? Math.floor(rawAvg) : Math.ceil(rawAvg);
-        subjectAverages.push(rawAvg);  // Store unrounded for overall average
+        subjectAverages.push(rawAvg);
         subjectGrades[subjects[i]] = {
           grades: validGrades.map(g => Math.round(g)).join(', '),
           roundedAvg: roundedAvg,
@@ -106,15 +94,13 @@ function extractGradesFromPage() {
         };
       } else {
         subjectGrades[subjects[i]] = {
-          grades: 'None',
+          grades: 'Nav',
           roundedAvg: null,
           rawAvg: null
         };
       }
     }
   }
-
-  // Remove first subject if needed
   if (Object.keys(subjectGrades).length > 0) {
     const firstKey = Object.keys(subjectGrades)[0];
     delete subjectGrades[firstKey];
@@ -122,11 +108,8 @@ function extractGradesFromPage() {
       subjectAverages.shift();
     }
   }
-
-  // Calculate overall average from unrounded subject averages
   const overallAvg = subjectAverages.length > 0 ? 
     subjectAverages.reduce((a, b) => a + b, 0) / subjectAverages.length : null;
-
   return {
     subjectGrades,
     overallAvg
@@ -138,7 +121,7 @@ function displayResults() {
   const overallDiv = document.getElementById('overall');
   
   if (!currentSubjectGrades || Object.keys(currentSubjectGrades).length === 0) {
-    resultsDiv.innerHTML = '<p>No grade data found on this page.</p>';
+    resultsDiv.innerHTML = '<p>Nav atzīmju dati.</p>';
     overallDiv.textContent = '';
     return;
   }
@@ -157,27 +140,22 @@ function displayResults() {
                  data-avg="${avgValue}">
           ${subject}
         </label>
-        <div class="grades">Grades: ${data.grades}</div>
+        <div class="grades">Atzīmes: ${data.grades}</div>
     `;
-    
     if (roundedAvg !== null) {
     const singleDigitAvg = Math.round(data.rawAvg);
     html += `
-      <div class="average">Average: ${singleDigitAvg} (${rawAvg})</div>
+      <div class="average">Vidējais: ${singleDigitAvg} (${rawAvg})</div>
     `;
   } else {
-    html += `<div class="average">No grades</div>`;
+    html += `<div class="average">Vidējais: Nav</div>`;
   }
-    
     html += `</div>`;
   }
-  
   resultsDiv.innerHTML = html;
-  
   document.querySelectorAll('.subject-checkbox').forEach(checkbox => {
     checkbox.addEventListener('change', recalculateAverage);
   });
-  
   recalculateAverage();
 }
 
@@ -185,12 +163,10 @@ function recalculateAverage() {
   const checkboxes = document.querySelectorAll('.subject-checkbox');
   let sum = 0;
   let count = 0;
-  
   checkboxes.forEach(checkbox => {
     if (checkbox.checked) {
       const avg = parseFloat(checkbox.dataset.avg);
       if (!isNaN(avg) && isFinite(avg)) {
-        // Use the rounded single-digit value for calculation
         const roundedSingleDigit = Math.round(avg);
         sum += roundedSingleDigit;
         count++;
@@ -201,16 +177,12 @@ function recalculateAverage() {
   const overallDiv = document.getElementById('overall');
   if (count > 0) {
     const overallAvg = sum / count;
-    // Display with 2 decimal places for consistency
-    overallDiv.textContent = `Overall Average: ${overallAvg.toFixed(2)}`;
+    overallDiv.textContent = `Vidējais visos priekšmetos: ${overallAvg.toFixed(2)}`;
   } else {
-    overallDiv.textContent = 'Select at least one subject with grades';
+    overallDiv.textContent = 'Izvēaties vismaz vienu priekšmetu';
   }
 }
 
-// Helper function to round to 2 decimal places
 function roundToTwo(num) {
   return Math.round((num + Number.EPSILON) * 100) / 100;
 }
-
-// Keep your existing extractGradesFromPage function

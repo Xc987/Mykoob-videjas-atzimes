@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Grade Extractor",
+  "name": "Mykoob vidējās atzīmes",
   "version": "1.0",
-  "description": "Extracts and calculates grades from school pages",
+  "description": "Izvada un aprēķina mykoob vidējās atzīmes",
   "permissions": ["activeTab", "scripting"],
   "host_permissions": ["https://family.mykoob.lv/*"],
   "action": {
