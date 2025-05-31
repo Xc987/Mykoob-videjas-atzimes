@@ -19,8 +19,11 @@
     "128": "icon128.png"
   },
   "browser_specific_settings": {
-  "gecko": {
-    "id": "A240706RL@rvt.lv"
+    "gecko": {
+      "id": "A240706RL@rvt.lv"
+    },
+    "gecko_android": {
+      "id": "A240706RL@rvt.lv"
     }
   }
 }

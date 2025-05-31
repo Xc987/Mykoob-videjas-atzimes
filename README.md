@@ -16,3 +16,7 @@
 
 1. Lejupielādēt jaunāko versiju (ar .xpi paplašīnājumu) no [izlaidumu lapas](https://github.com/Xc987/Mykoob-videjas-atzimes/releases)
 2. Atļaut instalāciju
+
+### Citi pārlūki 
+
+Pats kautkā instalē zip failu vai mapi
