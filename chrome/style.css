@@ -1,9 +1,3 @@
-.subject-checkbox {
-margin-right: 4px;
-padding-top: 0px;
-vertical-align: middle;
-cursor: pointer;
-}
 body {
     width: 400px;
     padding: 10px;
@@ -30,4 +24,16 @@ body {
     margin-top: 10px;
     padding-top: 10px;
     font-size: 1.1em;
+}
+.subject-checkbox {
+    margin-right: 4px;
+    padding-top: 0px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+.hr {
+    height:2px;
+    border-width:0;
+    color:rgb(2, 192, 255);
+    background-color:rgb(2, 192, 255)
 }
