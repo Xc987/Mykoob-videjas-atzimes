@@ -12,6 +12,8 @@
 4. Iespējojiet Izstrādātāja režīmu
 5. Nospiest "Ielādēt atpakotu" un izvēlēties "Chrome" mapi
 
+**Lai paplašīnājums netiktu noņemts, nedzēsiet "Chrome" mapi, to var atsāt jebkur.**
+
 ### Firefox 
 
 #### Desktop versija
