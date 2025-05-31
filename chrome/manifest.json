@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Mykoob vidējās atzīmes",
-  "version": "1.0",
+  "version": "1.1",
   "description": "Izvada un aprēķina mykoob vidējās atzīmes",
   "permissions": ["activeTab", "scripting"],
   "host_permissions": ["https://family.mykoob.lv/*"],
