@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .subject-checkbox {
+    margin-right: 8px;
+    vertical-align: middle;
+    cursor: pointer;
+  }
+    body {
+      width: 400px;
+      padding: 10px;
+      font-family: Arial, sans-serif;
+      background-color: rgb(28, 28, 28);
+    }
+    .name, .average, h2, p, label {
+      color: rgb(255, 255, 255)
+    }
+    .subject {
+      margin-bottom: 10px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 5px;
+    }
+    .grades {
+      color: rgb(220, 220, 220);
+      font-size: 0.9em;
+    }
+    .average {
+      font-weight: bold;
+    }
+    .overall {
+      color: rgb(255, 255, 255);
+      margin-top: 15px;
+      padding-top: 10px;
+      border-top: 2px solid #333;
+      font-size: 1.1em;
+    }
+  </style>
+</head>
+<body>
+  <h2>Grade Extractor</h2>
+  <hr style="height:2px;border-width:0;color:rgb(2, 192, 255);background-color:rgb(2, 192, 255)">
+  <div id="results"></div>
+  <div id="overall" class="overall"></div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>

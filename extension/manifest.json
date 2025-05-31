@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Grade Extractor",
+  "version": "1.0",
+  "description": "Extracts and calculates grades from school pages",
+  "permissions": ["activeTab", "scripting"],
+  "host_permissions": ["https://family.mykoob.lv/*"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+}
