@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
         function: extractGradesFromPage
       }, (results) => {
         if (chrome.runtime.lastError) {
-          document.getElementById('results').innerHTML = 
+          document.getElementById('resaults').innerHTML = 
             '<p>Error: ' + chrome.runtime.lastError.message + '</p>';
           return;
         }
@@ -57,32 +57,35 @@ function extractGradesFromPage() {
       const gradeCells = gradeRows[i].querySelectorAll('td[class*="col_month_"]');
       const validGrades = [];
       gradeCells.forEach(cell => {
-    const gradeSpans = cell.querySelectorAll('span.viewgrades_period_grade');
-    gradeSpans.forEach(gradeSpan => {
-        const hiddenTheme = gradeSpan.nextElementSibling;
-        if (hiddenTheme && hiddenTheme.classList.contains('hide') && 
-            hiddenTheme.classList.contains('_theme') && hiddenTheme.textContent) {
+        const gradeSpans = cell.querySelectorAll('span.viewgrades_period_grade');
+        gradeSpans.forEach(gradeSpan => {
+          const hiddenTheme = gradeSpan.nextElementSibling;
+          if (hiddenTheme && hiddenTheme.classList.contains('hide') && 
+              hiddenTheme.classList.contains('_theme') && hiddenTheme.textContent) {
             try {
-                const data = JSON.parse(hiddenTheme.textContent.replace(/\\\//g, '/'));
-                if (data.length > 0 && data[0].length > 2 && VALID_STATUSES.has(data[0][2])) {
-                    let grade = gradeSpan.textContent.trim();
-                    if (grade.includes('%')) {
-                        return;
-                    }
-                    if (grade.endsWith('`')) {
-                        grade = grade.slice(0, -1);
-                    }
-                    const num = parseFloat(grade);
-                    if (!isNaN(num)) {
-                        validGrades.push(num);
-                    }
+              const data = JSON.parse(hiddenTheme.textContent.replace(/\\\//g, '/'));
+              if (data.length > 0 && data[0].length > 2 && VALID_STATUSES.has(data[0][2])) {
+                let grade = gradeSpan.textContent.trim();
+                if (grade.includes('/')) {
+                  return;
                 }
+                if (grade.includes('%')) {
+                  return;
+                }
+                if (grade.endsWith('`')) {
+                  grade = grade.slice(0, -1);
+                }
+                const num = parseFloat(grade);
+                if (!isNaN(num)) {
+                  validGrades.push(num);
+                }
+              }
             } catch (e) {
-                console.error('Error parsing grade data:', e);
+              console.error('Error parsing grade data:', e);
             }
-        }
-    });
-});
+          }
+        });
+      });
       if (validGrades.length > 0) {
         const rawAvg = validGrades.reduce((a, b) => a + b, 0) / validGrades.length;
         const roundedAvg = (rawAvg - Math.floor(rawAvg)) < 0.5 ? Math.floor(rawAvg) : Math.ceil(rawAvg);
